@@ -8,17 +8,16 @@ template <typename T>
 class LinkedList
 {
 public:
-	LinkedList(void) {head = NULL; tail = NULL; size = 0;};
+	LinkedList(void) {head = tail = new node; size = 0;};
 	LinkedList(int size): size(size){};
 
 	~LinkedList(void);
 
 	//modify the list
-	void RemoveAfter(node* n);
-	void InsertAfter(node* n);
+	void Remove(node* n);
 
-	void RemoveBefore(node* n);
 	void InsertAfter(node* n);
+	void InsertBefore(node* n);
 
 	void DeleteAll(void);
 
