@@ -1,6 +1,7 @@
 #include <iostream>
 #include "LinkedList.h"
 
+
 using namespace std;
 
 
@@ -9,7 +10,7 @@ int main ()
 	
 	LinkedList<int> list;
 
-	list.AddInFront(34);
+	list.PushFront(34);
 
 
 

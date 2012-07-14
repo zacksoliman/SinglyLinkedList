@@ -4,6 +4,7 @@
 #include<iostream>
 #include<iterator>
 
+//I need a forward declaration or do I ???
 template<typename T> class LinkedList;
 
 ///*******Node class*******///
@@ -28,17 +29,16 @@ template <typename T>
 class LinkedList
 {
 public:
-
 	////*********Iterator Class*********////
 	////*************START*************////
-
 	class ListIterator : public std::iterator<std::forward_iterator_tag, T>
 	{
 	public:
 		friend class LinkedList<T>;
 		ListIterator(ListNode<T>* value):currPos(value) {};
 		ListIterator():currPos(NULL) {};
-		//operators
+
+		//operators yay!!
 		void operator++() {currPos = currPos->next;};
 		void operator++(int) {currPos = currPos->next;};
 		bool operator!=(ListIterator rval){ return (currPos != rval.currPos); }
@@ -47,87 +47,133 @@ public:
 		T operator*() {return currPos->next->data;};
 		T* operator->() {return &(currPos->next->data);};
 
-
 	private:
 		ListNode<T>* currPos;
 	};
-
 	////*********Iterator Class*********////
 	////**************END***************////
 
 	//Destructor & constructor... pretty basic stuff
-	LinkedList(void): length(0), head(new ListNode<T>), tail(head){};
-	~LinkedList(void)
+	LinkedList(void): length(0)
 	{
-		///****TO DO***///
+		try{
+			head = new ListNode<T>;
+			tail = head;
+		}catch(bad_alloc& exc){
+			cout<<"Memory allocation failed";
+		}
 	};
+	~LinkedList(void) {ClearList(); delete head;};
 
 
 	//*** List Manipulation Methods ***//
 
-	void Remove(ListIterator& it)
+	//Removes an element... this comment was pointless
+	void Remove(const ListIterator& it)
 	{
-		ListNode<T>* temp = NULL;
-		temp = it.currPos->next;
-		it.curPos->next = it.curPos->next->next;
-		delete temp;
+		if (!IsEmpty()){
+			ListNode<T>* temp = NULL;
+			temp = it.currPos->next;
+			it.currPos->next = it.currPos->next->next;
+			delete temp;
+			--length;
+		}
 	};
 
-//	void InsertAfter(ListNode<T>* n);
-//	void InsertBefore(ListNode<T>* n);
+	//inserts an element after our position, returns false if it fails
+	bool InsertAfter(const ListIterator& it, const T& data)
+	{
+		if (!IsEmpty()){
+			try {
+				ListNode<T>* newNode = new ListNode<T>;
+				newNode->data = data;
+				newNode->next = it.currPos->next->next;
+				it.currPos->next->next = newNode;
+				++length;
+				return true;
+				}
+			catch(bad_alloc& exc){
+					return false;
+			}
+		}else
+			return;
+	};
+
+	//inserts an element before our current position, returns false if it fails
+	void InsertBefore(const ListIterator& it, const T& data)
+	{
+		if (!IsEmpty()){
+			try {
+				ListNode<T>* newNode = new ListNode<T>;
+				newNode->data = data;
+				newNode->next = it.currPos->next;
+				it.currPos->next = newNode;
+				++length;
+				return true;
+			}catch(bad_alloc& exc){
+					return false;
+			}else
+				return;
+		}
+	};
+
+	void ClearList(void)
+	{
+		ListNode<T>* temp;
+		while(head->next != NULL)
+		{
+			temp = head;
+			head = head->next;
+			delete temp;
+		}
+	};
 
 
-	//Add an element to the fornt of the list, returns false if it fails
-	bool AddInFront(const T& data)
+	//Add an element to the front of the list, returns false if it fails
+	bool PushFront(const T& data)
 	{
 		try {
 			ListNode<T>* newNode = new ListNode<T>;
 			newNode->data = data;
 			newNode->next = head->next;
 
-			if ( tail == head ){
+			if ( tail == head ){ 
 				tail = newNode;
-				newNode->next = NULL;
+				tail->next = NULL;
 			}
 			head->next = newNode;
 			++length;
 			return true;
-		}
-			catch(bad_alloc& exc){
+		}catch(bad_alloc& exc){
 				return false;
 			}
 	};
 
-	bool AddToBack(const T& data)
+	//Add an element to the back of the list, returns false if it fails
+	bool PushBack(const T& data)
 	{
-		ListNode<T>* newNode = new ListNode<T>;
-		newNode->next = NULL;
-		newNode->data = data;
-		tail = newNode;
+		try {
+			ListNode<T>* newNode = new ListNode<T>;
+			newNode->data = data;
+			newNode->next = NULL;
 
-		return true;
+			if ( tail == head ){ 
+				tail = newNode;
+				head->next = newNode;
+			}
+
+			++length;
+			return true;
+		}catch(bad_alloc& exc){
+				return false;
+			}
 	};
-
-	//removes first element of the list
-	void RemoveFront(void)
-	{
-		if (!IsEmpty()){
-			ListNode<T>* temp = NULL;
-			temp = head;
-			head = temp->next;
-			delete temp;
-			--length;
-		}else
-			return;
-	};
-
 
 	//********Accessors********//
 
 	unsigned int GetLength(void) {return length;};
 	bool IsEmpty(void) { return (length == 0); };
-	T FirstElement() {return head->data;};
-	T LastElement() {return tail->data;};
+	T FirstElement() {return head->next->data;};
 
 	//** Get relevant positions **//
 	ListIterator begin(void) {return ListIterator(head); };
@@ -141,4 +187,5 @@ private:
 
 };
 
+#include"LinkedList.cpp"
 #endif
