@@ -36,7 +36,7 @@ public:
 
 	void DeleteFront(void)
 	{
-		if (size != 0){
+		if (!IsEmpty()){
 			node* temp = NULL;
 			temp->next = head->next;
 			head->next = head->next->next;
@@ -46,9 +46,17 @@ public:
 			return;
 	};
 
+	//Important information
+	unsigned int GetLength(void);
+	bool IsEmpty(void) { return (size == 0); };
+
 	//Access elements
-	T GetFirstElement();
-	T GetLastElement();
+	T FirstElement();
+	T LastElement();
+
+	//Get relevant positions
+	T* GetEndPosition(void){return tail;};
+	T* GetStartPosition(void) {return head;};
 
 private:
 
@@ -65,7 +73,5 @@ private:
 	};
 	
 };
-
-#include "LinkedList.cpp"
 
 #endif
