@@ -15,6 +15,7 @@ int main ()
 
 	unsigned int size = list.GetLength();
 	cout<<*(list.begin());
+
 	for (LinkedList<int>::ListIterator it = list.begin(); it!=list.end(); ++it)
 		cout<<*it<<" ";
 

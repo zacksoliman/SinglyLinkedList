@@ -7,6 +7,8 @@
 template<typename T> class LinkedList;
 
 ///*******Node class*******///
+///*********START*********///
+
 template<typename T>
 class ListNode
 {
@@ -15,10 +17,13 @@ private:
 	friend class LinkedList<T>;
 	T data;
 	ListNode<T>* next;
-
 };
 
+///*******Node class*******///
+///**********END**********///
 
+
+///***Linked List Implementation ***///
 template <typename T>
 class LinkedList
 {
@@ -58,7 +63,7 @@ public:
 	};
 
 
-	//*** List Modification Methods ***//
+	//*** List Manipulation Methods ***//
 
 	void Remove(ListIterator& it)
 	{
@@ -72,22 +77,25 @@ public:
 //	void InsertBefore(ListNode<T>* n);
 
 
-	//Add an element to the fornt of the list
-	//returns false if it fails
+	//Add an element to the fornt of the list, returns false if it fails
 	bool AddInFront(const T& data)
 	{
-		ListNode<T>* newNode = new ListNode<T>;
+		try {
+			ListNode<T>* newNode = new ListNode<T>;
+			newNode->data = data;
+			newNode->next = head->next;
 
-		newNode->data = data;
-		newNode->next = head->next;
-
-		if ( tail == head ){
-			tail = newNode;
-			newNode->next = NULL;
+			if ( tail == head ){
+				tail = newNode;
+				newNode->next = NULL;
+			}
+			head->next = newNode;
+			++length;
+			return true;
 		}
-		head->next = newNode;
-		++length;
-		return true;
+			catch(bad_alloc& exc){
+				return false;
+			}
 	};
 
 	bool AddToBack(const T& data)
@@ -114,12 +122,10 @@ public:
 	};
 
 
-	//**Important information***//
+	//********Accessors********//
 
 	unsigned int GetLength(void) {return length;};
 	bool IsEmpty(void) { return (length == 0); };
-
-	//** Access elements **//
 	T FirstElement() {return head->data;};
 	T LastElement() {return tail->data;};
 
@@ -129,8 +135,8 @@ public:
 
 private:
 
-	ListNode<T>* head;
-	ListNode<T>* tail;
+	ListNode<T>* head;		//keeps track of the first element of the list
+	ListNode<T>* tail;		//keeps traks of the last element in the list
 	unsigned int length;	//length of the list
 
 };
