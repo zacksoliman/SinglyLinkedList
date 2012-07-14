@@ -4,86 +4,95 @@
 #include<iostream>
 #include<iterator>
 
-struct node;
-/////////////////****** TO DO ******////////////////////
-//													  //
-// - I need to add some kind of iterator			  //		
-// - I need to define a copy constructor              //
-// - Also overload the '=' operator					  //
-////////////////////////////////////////////////////////
+template<typename T> class LinkedList;
+
+///*******Node class*******///
+template<typename T>
+class ListNode
+{
+private:
+	ListNode():next(NULL) {};
+	friend class LinkedList<T>;
+	T data;
+	ListNode<T>* next;
+
+};
+
+
 template <typename T>
 class LinkedList
 {
 public:
-	LinkedList(void): length(0)
-	{
-		try { head = new node;}
-		catch(bad_alloc& exc) 
-		{
-			std::cout<<"Memory allocation failed"; 
-			return;
-		}
 
-		tail = head;
+	////*********Iterator Class*********////
+	////*************START*************////
+
+	class ListIterator : public std::iterator<std::forward_iterator_tag, T>
+	{
+	public:
+		friend class LinkedList<T>;
+		ListIterator(ListNode<T>* value):currPos(value) {};
+		ListIterator():currPos(NULL) {};
+		//operators
+		void operator++() {currPos = currPos->next;};
+		void operator++(int) {currPos = currPos->next;};
+		bool operator!=(ListIterator rval){ return (currPos != rval.currPos); }
+		bool operator==(ListIterator rval){ return (currPos == rval.currPos); }
+
+		T operator*() {return currPos->next->data;};
+		T* operator->() {return &(currPos->next->data);};
+
+
+	private:
+		ListNode<T>* currPos;
 	};
 
-	LinkedList(int size): length(size)
-	{
-		try { head = new node[size];}
-		catch(bad_alloc& exc) 
-		{
-			std::cout<<"Memory allocation failed"; 
-			return;
-		}
+	////*********Iterator Class*********////
+	////**************END***************////
 
-		tail = head;
-	};
-
+	//Destructor & constructor... pretty basic stuff
+	LinkedList(void): length(0), head(new ListNode<T>), tail(head){};
 	~LinkedList(void)
 	{
-		node* temp = NULL;
-
-		for (size>0; --size)
-		{
-			temp->next = head->next;
-			delete head;
-			head = temp ->next;
-		}
-
+		///****TO DO***///
 	};
 
-	//*** List Modification ***//
 
-	void Remove(node* n);
+	//*** List Modification Methods ***//
 
-	void InsertAfter(node* n);
-	void InsertBefore(node* n);
+	void Remove(ListIterator& it)
+	{
+		ListNode<T>* temp = NULL;
+		temp = it.currPos->next;
+		it.curPos->next = it.curPos->next->next;
+		delete temp;
+	};
 
-	void DeleteAll(void);
+//	void InsertAfter(ListNode<T>* n);
+//	void InsertBefore(ListNode<T>* n);
+
 
 	//Add an element to the fornt of the list
 	//returns false if it fails
 	bool AddInFront(const T& data)
 	{
-		try { node* newNode = new node;}
-		catch(std::bad_alloc& exc) {return false;}
+		ListNode<T>* newNode = new ListNode<T>;
 
 		newNode->data = data;
-		newNode->next = head;
+		newNode->next = head->next;
 
-		if ( tail == head )
-			tail = head;
-
-		head = newNode;
+		if ( tail == head ){
+			tail = newNode;
+			newNode->next = NULL;
+		}
+		head->next = newNode;
 		++length;
 		return true;
 	};
 
 	bool AddToBack(const T& data)
 	{
-		try { node* newNode = new node;}
-		catch(std::bad_alloc& exc) {return false;}
-
+		ListNode<T>* newNode = new ListNode<T>;
 		newNode->next = NULL;
 		newNode->data = data;
 		tail = newNode;
@@ -91,15 +100,15 @@ public:
 		return true;
 	};
 
-	//Delete first element of the list
-	void DeleteFront(void)
+	//removes first element of the list
+	void RemoveFront(void)
 	{
 		if (!IsEmpty()){
-			node* temp = NULL;
-			temp->next = head->next;
-			head->next = head->next->next;
+			ListNode<T>* temp = NULL;
+			temp = head;
+			head = temp->next;
 			delete temp;
-			--size;
+			--length;
 		}else
 			return;
 	};
@@ -107,30 +116,23 @@ public:
 
 	//**Important information***//
 
-	unsigned int GetLength(void);
-	bool IsEmpty(void) { return (size == 0); };
+	unsigned int GetLength(void) {return length;};
+	bool IsEmpty(void) { return (length == 0); };
 
 	//** Access elements **//
-	T FirstElement();
-	T LastElement();
+	T FirstElement() {return head->data;};
+	T LastElement() {return tail->data;};
 
 	//** Get relevant positions **//
-	T* GetEndPosition(void){return tail;};
-	T* GetStartPosition(void) {return head;};
+	ListIterator begin(void) {return ListIterator(head); };
+	ListIterator end(void) {return ListIterator(tail); };
 
 private:
 
-	node* head;
-	node* tail;
-	node* current;
+	ListNode<T>* head;
+	ListNode<T>* tail;
 	unsigned int length;	//length of the list
 
-	struct node 
-	{
-		T data;
-		node* next;
-	};
-	
 };
 
 #endif
