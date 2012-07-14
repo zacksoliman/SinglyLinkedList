@@ -50,6 +50,7 @@ public:
 	private:
 		ListNode<T>* currPos;
 	};
+
 	////*********Iterator Class*********////
 	////**************END***************////
 
@@ -59,6 +60,7 @@ public:
 		try{
 			head = new ListNode<T>;
 			tail = head;
+			head->next = NULL;
 		}catch(bad_alloc& exc){
 			cout<<"Memory allocation failed";
 		}
@@ -137,13 +139,13 @@ public:
 			newNode->data = data;
 			newNode->next = head->next;
 
-			if ( tail == head ){ 
-				tail = newNode;
-				tail->next = NULL;
-			}
+			if ( tail == head )	tail = newNode;	
+
 			head->next = newNode;
+			
 			++length;
 			return true;
+
 		}catch(bad_alloc& exc){
 				return false;
 			}

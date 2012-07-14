@@ -1,24 +1,31 @@
 #include <iostream>
+#include<ctime>
 #include "LinkedList.h"
-
 
 using namespace std;
 
 
 int main ()
 {
-	
+	srand(time(NULL));
+
 	LinkedList<int> list;
+	LinkedList<int>::ListIterator it;
 
-	list.PushFront(34);
+	cout<<"Input length of list: ";
+	int n;
+	cin >> n;
 
+	for(int i=0; i < n ; ++i){
 
+		list.PushFront(rand() % 100 +1);
+	}
 
-	unsigned int size = list.GetLength();
-	cout<<*(list.begin());
-
-	for (LinkedList<int>::ListIterator it = list.begin(); it!=list.end(); ++it)
+	for (it = list.begin(); it!=list.end(); ++it){
 		cout<<*it<<" ";
+	};
+
+	cout<<endl;
 
 	system("PAUSE");
 	
