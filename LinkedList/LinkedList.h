@@ -186,6 +186,4 @@ private:
 	unsigned int length;	//length of the list
 
 };
-
-#include"LinkedList.cpp"
 #endif
