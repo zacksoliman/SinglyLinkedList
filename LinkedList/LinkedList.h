@@ -1,36 +1,37 @@
-#pragma once
-//steve.morse@magma.ca
-
+#ifndef _LINKEDLIST_H_
+#define	_LINKEDLIST_H_
 struct node;
+
+//I need to add some kind of iterator
 
 template <typename T>
 class LinkedList
 {
 public:
 	LinkedList(void) {head = NULL; tail = NULL; size = 0;};
-	virtual ~LinkedList(void);
+	LinkedList(int size): size(size){};
+
+	~LinkedList(void);
 
 	//modify the list
-	void remove(node* n)
-	{
+	void RemoveAfter(node* n);
+	void InsertAfter(node* n);
 
-	};
-	void insert(node* n);
+	void RemoveBefore(node* n);
+	void InsertAfter(node* n);
+
 	void DeleteAll(void);
 
 	bool AddInFront(const T& data)
 	{
 		try { node* newNode = new node; }
-
 		catch(std::bad_alloc& exc) {return false; }
 
 		tail = head;
 		newNode->data = data;
 		newNode->next = head;
 		head = newNode;
-
 		++size;
-
 		return true;
 	};
 
@@ -66,3 +67,6 @@ private:
 	
 };
 
+#include "LinkedList.cpp"
+
+#endif
