@@ -8,8 +8,6 @@
 template<typename T> class LinkedList;
 
 ///*******Node class*******///
-///*********START*********///
-
 template<typename T>
 class ListNode
 {
@@ -21,33 +19,28 @@ private:
 };
 
 
-///***Linked List Implementation ***///
 template <typename T>
 class LinkedList
 {
 public:
-	////********************************////
+	
 	////*********Iterator Class*********////
-	////*************START*************////
-	////******************************////
 	class ListIterator : public std::iterator<std::forward_iterator_tag, T>
 	{
 	public:
-		friend class LinkedList<T>;
-		ListIterator(ListNode<T>* value):currPos(value) {};
 		ListIterator():currPos(NULL) {};
-
 		//operators
 		void operator++() {currPos = currPos->next;};
 		void operator++(int) {currPos = currPos->next;};
 		bool operator!=(ListIterator rval){ return (currPos != rval.currPos); }
 		bool operator==(ListIterator rval){ return (currPos == rval.currPos); }
-
 		T operator*() {return currPos->next->data;};
 		T* operator->() {return &(currPos->next->data);};
 
 	private:
 		ListNode<T>* currPos;
+		friend class LinkedList<T>;
+		ListIterator(ListNode<T>* value):currPos(value) {};
 	};
 
 
@@ -62,12 +55,11 @@ public:
 			cout<<"Memory allocation failed";
 		}
 	};
-	~LinkedList(void) {ClearList(); delete head;};
+	~LinkedList(void) {DeleteList(); delete head;};
 
 
 	//*** List Manipulation Methods ***//
-
-	//Removes an element... this comment was pointless
+	//Removes the element that is pointed to by the iterator
 	void Remove(const ListIterator& it)
 	{
 		if (!IsEmpty()){
@@ -116,7 +108,8 @@ public:
 		}
 	};
 
-	void ClearList(void)
+	//deletes the entire list
+	void DeleteList(void)
 	{
 		ListNode<T>* temp;
 		while(head->next != NULL)
@@ -124,6 +117,7 @@ public:
 			temp = head;
 			head = head->next;
 			delete temp;
+			--length;
 		}
 	};
 
@@ -172,7 +166,6 @@ public:
 	};
 
 	//********Accessors********//
-
 	unsigned int GetLength(void) {return length;};
 	bool IsEmpty(void) { return (length == 0); };
 	T FirstElement() {return head->next->data;};

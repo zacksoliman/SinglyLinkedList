@@ -28,7 +28,13 @@ int main ()
 
 	cout<<endl;
 
+	list.DeleteList();
+
+	if (list.IsEmpty())
+		cout<<"yeah";
+
 	system("PAUSE");
 	
+
 	return 0;
 }
