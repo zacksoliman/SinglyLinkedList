@@ -38,7 +38,7 @@ public:
 		ListIterator(ListNode<T>* value):currPos(value) {};
 		ListIterator():currPos(NULL) {};
 
-		//operators yay!!
+		//operators
 		void operator++() {currPos = currPos->next;};
 		void operator++(int) {currPos = currPos->next;};
 		bool operator!=(ListIterator rval){ return (currPos != rval.currPos); }
@@ -162,6 +162,9 @@ public:
 			if ( tail == head ){ 
 				tail = newNode;
 				head->next = newNode;
+			}else{
+				tail->next = newNode;
+				tail = newNode;
 			}
 
 			++length;
