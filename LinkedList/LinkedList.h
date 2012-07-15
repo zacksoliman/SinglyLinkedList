@@ -4,7 +4,7 @@
 #include<iostream>
 #include<iterator>
 
-//I need a forward declaration or do I ???
+
 template<typename T> class LinkedList;
 
 ///*******Node class*******///
@@ -20,17 +20,16 @@ private:
 	ListNode<T>* next;
 };
 
-///*******Node class*******///
-///**********END**********///
-
 
 ///***Linked List Implementation ***///
 template <typename T>
 class LinkedList
 {
 public:
+	////********************************////
 	////*********Iterator Class*********////
 	////*************START*************////
+	////******************************////
 	class ListIterator : public std::iterator<std::forward_iterator_tag, T>
 	{
 	public:
@@ -51,8 +50,6 @@ public:
 		ListNode<T>* currPos;
 	};
 
-	////*********Iterator Class*********////
-	////**************END***************////
 
 	//Destructor & constructor... pretty basic stuff
 	LinkedList(void): length(0)
