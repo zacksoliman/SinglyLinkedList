@@ -36,6 +36,13 @@ public:
 		bool operator==(ListIterator rval){ return (currPos == rval.currPos); }
 		T operator*() {return currPos->next->data;};
 		T* operator->() {return &(currPos->next->data);};
+		ListIterator& operator=(ListIterator& rval)
+		{
+			if (this->currPos == rval.currPos)
+				return *this;
+			this->currPos = rval.currPos;
+			return *this;
+		};
 
 	private:
 		ListNode<T>* currPos;
