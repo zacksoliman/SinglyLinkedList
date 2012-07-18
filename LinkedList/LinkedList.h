@@ -51,7 +51,7 @@ public:
 	};
 
 
-	//Destructor & constructor... pretty basic stuff
+	//Constructor
 	LinkedList(void): length(0)
 	{
 		try{
@@ -62,6 +62,8 @@ public:
 			cout<<"Memory allocation failed";
 		}
 	};
+
+	//Destructor
 	~LinkedList(void) {DeleteList(); delete head;};
 
 
@@ -113,6 +115,15 @@ public:
 			}else
 				return;
 		}
+	};
+
+	//remove first element of the list
+	void DeleteFirst(void)
+	{
+		ListNode<T>* temp;
+		temp = head->next;
+		head->next = head->next->next;
+		delete temp;
 	};
 
 	//deletes the entire list
