@@ -39,8 +39,7 @@ public:
 		T operator*() {return currPos->next->data;};
 		T* operator->() {return &(currPos->next->data);};
 		ListIterator& operator=(ListIterator& rval){
-			if (this->currPos == rval.currPos)
-				return *this;
+			if (this->currPos == rval.currPos) return *this;
 			this->currPos = rval.currPos;
 			return *this;
 		};
@@ -53,7 +52,7 @@ public:
 	////*********END*********////
 	
 	LinkedList(void); //Constructor
-	~LinkedList(void) { DeleteList(); delete head; }; //Destructor
+	~LinkedList(void) { /*DeleteList();*/ }; //Destructor
 
 	//*** List Manipulation Methods ***//
 
@@ -82,30 +81,138 @@ public:
 
 	ListIterator begin(void) {return ListIterator(head); };
 	ListIterator end(void) {return ListIterator(tail); };
+/*
+	LinkedList<T>& operator=(LinkedList<T>& rval){
+
+			if (this->head == rval.head) return *this;
+
+			LinkedList<T>::ListIterator it = rval.begin();
+			this->DeleteList();
+			while(it != rval.end()){
+			
+				this->PushBack(*it);
+				++it;
+			}
+
+			return *this;
+		};
+	*/	
 };
 
+//Merge function that the merge sort algorithm will use to merge two linked lists
+template<typename T>
+LinkedList<T> Merge(LinkedList<T> left, LinkedList<T> right )
+{
+	LinkedList<T>::ListIterator leftIt = left.begin();
+	LinkedList<T>::ListIterator rightIt = right.begin();
+	LinkedList<T> sortedList;
 
-template <typename T>
+	while (!left.IsEmpty() && !right.IsEmpty()){
+		
+		if(*leftIt >= *rightIt){
+
+			sortedList.PushBack(*rightIt);
+			right.DeleteHead();
+			rightIt = right.begin();
+
+		}else if (*leftIt <= *rightIt){
+
+			sortedList.PushBack(*leftIt);
+			left.DeleteHead();
+			leftIt = left.begin();
+		}
+	}
+
+	if(left.IsEmpty()){
+
+		while(!right.IsEmpty()){
+
+			sortedList.PushBack(*rightIt);
+			right.DeleteHead();
+			rightIt = right.begin();
+		}
+
+	}else if(right.IsEmpty()){
+
+		while(!left.IsEmpty()){
+
+			sortedList.PushBack(*leftIt);
+			left.DeleteHead();
+			leftIt = left.begin();
+		}
+	}
+
+	
+	return sortedList;
+}
+
+//The MergeSort function recusivly partitions the linked lists and then merges them by calling the merge() function
+template<typename T>
+LinkedList<T> MergeSort (LinkedList<T> list)
+{
+	if (list.GetLength() == 1)
+		return list;
+	
+	LinkedList<T> left, right, sorted;
+	LinkedList<T>::ListIterator it = list.begin();
+
+	unsigned int midPoint = list.GetLength()/2;	//if length is odd, midPoint will be the floor of the division
+
+	for(unsigned int i=0; i < midPoint; ++i){
+	
+		left.PushBack(*it);
+		list.DeleteHead();
+		it = list.begin();
+	}
+
+
+	while (list.GetLength() != 0){
+
+		right.PushBack(*it);
+		list.DeleteHead();
+		it = list.begin();
+
+	}
+
+	left = MergeSort(left);
+    right = MergeSort(right);
+	
+	return Merge(left, right);
+
+}
+
+
+template<typename T>
 LinkedList<T>::LinkedList(void): length(0)
 	{
 		try{
 			head = new ListNode<T>;
 			tail = head;
-			head->next = NULL;
+			tail->next = NULL;
 		}catch(bad_alloc& exc){
-			cerr<<"Memory allocation failed, cannot initilize the linked list.";
+			cerr<<"Memory allocation failed, cannot initialize the linked list.";
 		}
 	}
 
-template <typename T>
+template<typename T>
 void LinkedList<T>::Remove(const ListIterator& it)
 {
-	if (!IsEmpty()){
+	if (!IsEmpty() && length > 1){
 		ListNode<T>* temp = NULL;
 		temp = it.currPos->next;
 		it.currPos->next = it.currPos->next->next;
 		delete temp;
+		temp=NULL;
 		--length;
+	}else if (length == 1){
+
+		ListNode<T>* temp = NULL;
+		temp = it.currPos->next;
+		it.currPos->next = it.currPos->next->next;
+		tail=head;
+		delete temp;
+		temp=NULL;
+		--length;	
 	}
 }
 
@@ -149,23 +256,27 @@ void LinkedList<T>::InsertBefore(const ListIterator& it, const T& data)
 template<typename T>
 void LinkedList<T>::DeleteHead(void)
 	{
-		ListNode<T>* temp;
-		temp = head->next;
-		head->next = head->next->next;
-		delete temp;
+		if(length > 1){
+			ListNode<T>* temp;
+			temp = head->next;
+			head->next = head->next->next;
+			delete temp;
+			--length;
+		}else if (length == 1){
+			ListNode<T>* temp;
+			temp = head->next;
+			head->next = head->next->next;
+			tail=head;
+			delete temp;
+			--length;		
+		}
 	}
 
 template<typename T>
 void LinkedList<T>::DeleteList(void)
 	{
-		ListNode<T>* temp;
 		while(head->next != NULL)
-		{
-			temp = head;
-			head = head->next;
-			delete temp;
-			--length;
-		}
+			DeleteHead();
 	}
 
 template<typename T>

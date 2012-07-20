@@ -1,6 +1,7 @@
 #include <iostream>
 #include<ctime>
 #include "LinkedList.h"
+#include "timer.h"
 
 using namespace std;
 
@@ -27,11 +28,18 @@ int main ()
 	};
 
 	cout<<endl;
+	
+	timer::StartTimer();
+	list = MergeSort(list);
+	double time = timer::GetTime();
 
-	list.DeleteList();
+	cout<<"Sorted List:\n";
 
-	if (list.IsEmpty())
-		cout<<"yeah";
+	for (it = list.begin(); it!=list.end(); ++it){
+		cout<<*it<<" ";
+	};
+	
+	cout<<endl<<"It took: "<<time<<" nanoseconds";
 
 	system("PAUSE");
 	
