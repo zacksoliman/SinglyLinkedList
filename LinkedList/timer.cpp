@@ -8,7 +8,7 @@ timer::timer(void)
 	if(!QueryPerformanceFrequency(&Lint))
 		std::cerr<<"QueryPerformanceFrequency failed"<<std::endl;
 
-	freq = (double)(Lint.QuadPart)/1000000000;	//get number of clock ticks per nanoseconds
+	freq = (double)(Lint.QuadPart)/1000;	//get number of clock ticks per miliseconds
 }
 
 

@@ -11,6 +11,7 @@ int main ()
 {
 	srand(time(NULL));
 
+	timer time;
 	LinkedList<int> list;
 	LinkedList<int>::ListIterator it;
 
@@ -29,9 +30,9 @@ int main ()
 
 	cout<<endl;
 	
-	timer::StartTimer();
+	time.StartTimer();
 	list = MergeSort(list);
-	double time = timer::GetTime();
+	double timeElapsed = time.GetTime();
 
 	cout<<"Sorted List:\n";
 
@@ -39,7 +40,7 @@ int main ()
 		cout<<*it<<" ";
 	};
 	
-	cout<<endl<<"It took: "<<time<<" nanoseconds";
+	cout<<endl<<"It took: "<< timeElapsed <<" miliseconds"<<endl;
 
 	system("PAUSE");
 	
