@@ -2,6 +2,7 @@
 #include<ctime>
 #include "LinkedList.h"
 #include "timer.h"
+#include "MergeSort.h"
 
 using namespace std;
 
