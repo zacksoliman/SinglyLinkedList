@@ -52,7 +52,7 @@ LinkedList<T> Merge(LinkedList<T> left, LinkedList<T> right )
 template<typename T>
 LinkedList<T> MergeSort (LinkedList<T> list)
 {
-	if (list.GetLength() == 1)
+	if (list.GetLength() <= 1)
 		return list;
 	
 	LinkedList<T> left, right, sorted;

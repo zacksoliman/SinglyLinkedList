@@ -52,7 +52,34 @@ public:
 	////*********END*********////
 	
 	LinkedList(void); //Constructor
-	~LinkedList(void) { /*DeleteList();*/ }; //Destructor
+	//Copy constructor
+	LinkedList(const LinkedList& other)
+	{
+
+		ListNode<T> *current=NULL, *next=NULL;
+		if(other.head->next == NULL)
+			head->next = NULL;
+		else
+		{
+			current = head = new ListNode<T>;
+			next = other.head->next;
+
+			while (next)
+			{
+				current->next = new ListNode<T>;
+				current=current->next;
+				current->data = next->data;
+
+				next = next->next;
+			}
+		}
+
+		length = other.length;
+		tail = current;
+		current->next=NULL;
+
+	}
+	~LinkedList(void) {DeleteList(); delete head;}; //Destructor
 
 	//*** List Manipulation Methods ***//
 
@@ -81,7 +108,7 @@ public:
 
 	ListIterator begin(void) {return ListIterator(head); };
 	ListIterator end(void) {return ListIterator(tail); };
-/*
+
 	LinkedList<T>& operator=(LinkedList<T>& rval){
 
 			if (this->head == rval.head) return *this;
@@ -96,7 +123,6 @@ public:
 
 			return *this;
 		};
-	*/	
 };
 
 
@@ -193,8 +219,16 @@ void LinkedList<T>::DeleteHead(void)
 template<typename T>
 void LinkedList<T>::DeleteList(void)
 	{
+		ListNode<T>* temp;
+
 		while(head->next != NULL)
-			DeleteHead();
+		{
+			temp = head;
+			head=head->next;
+			delete temp;
+			--length;
+		}
+			
 	}
 
 template<typename T>
