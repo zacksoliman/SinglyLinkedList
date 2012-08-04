@@ -1,8 +1,8 @@
 	TODO
 -------------------
 Implement the mergesort function
-as a member function of linked list to increase
-efficiency.
+as a member function of linked list so it can acces
+the private pointers to increase efficiency.
 
 Currently when it returns the linked list it calls the copy
 constructor which copies all the elements one by one. That's not very good
