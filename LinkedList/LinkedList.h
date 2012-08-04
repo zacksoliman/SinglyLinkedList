@@ -55,7 +55,6 @@ public:
 	//Copy constructor
 	LinkedList(const LinkedList& other)
 	{
-
 		ListNode<T> *current=NULL, *next=NULL;
 		if(other.head->next == NULL)
 			head->next = NULL;
@@ -78,7 +77,24 @@ public:
 		tail = current;
 		current->next=NULL;
 
-	}
+	};
+
+	//assignment operator
+	LinkedList<T>& operator=(LinkedList<T>& rval)
+	{
+		if (this->head == rval.head) return *this;
+
+		LinkedList<T>::ListIterator it = rval.begin();
+		this->DeleteList();
+		while(it != rval.end()){
+		
+			this->PushBack(*it);
+			++it;
+		}
+
+		return *this;
+	};
+
 	~LinkedList(void) {DeleteList(); delete head;}; //Destructor
 
 	//*** List Manipulation Methods ***//
@@ -109,20 +125,6 @@ public:
 	ListIterator begin(void) {return ListIterator(head); };
 	ListIterator end(void) {return ListIterator(tail); };
 
-	LinkedList<T>& operator=(LinkedList<T>& rval){
-
-			if (this->head == rval.head) return *this;
-
-			LinkedList<T>::ListIterator it = rval.begin();
-			this->DeleteList();
-			while(it != rval.end()){
-			
-				this->PushBack(*it);
-				++it;
-			}
-
-			return *this;
-		};
 };
 
 

@@ -25,6 +25,7 @@ int main ()
 		list.PushFront(rand() % 100 +1);
 	}
 
+	
 	for (it = list.begin(); it!=list.end(); ++it){
 		cout<<*it<<" ";
 	};
@@ -34,7 +35,7 @@ int main ()
 	time.StartTimer();
 	list = MergeSort(list);
 	double timeElapsed = time.GetTime();
-
+	
 	cout<<"Sorted List:\n";
 
 	for (it = list.begin(); it!=list.end(); ++it){
